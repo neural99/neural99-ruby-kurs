@@ -1,0 +1,57 @@
+2010-06-10:
+Jag skriver README-filen. Lägger till mer kommentarer och
+snyggar upp koden. Jag börjar förstå hur kraftfulla Rubys
+iteratorer och block är. Dock börjar jag även se fördelar
+med statisk typning versus dynamaisk typning. Jag tror
+också arvsmekanismen i Ruby inte är lika viktig som i 
+Java, där typningen måste matcha upp i compile-time.
+
+Att fånga NoMethodError i menu.rb kanske inte var den
+bästa ideen, jag fick lite konstiga felmeddelanden som
+jag först inte förstod men kunde senare komma på vad de
+berode på.
+
+2010-06-09:
+Jag har börjat designa klasserna. Jag ser vissa problem med
+att göra så att Gäst-klassen läser in sig själv. Det kan uppkomma
+situationer där en instans inte har gilltig data. Men som jag designade
+version 1 får man fortsätta tills man har matat in gilltig data. Då
+borde denna situation aldrig uppstå. Det kanske inte heller är så
+snyggt att lämna gäst-instansen i kontroll av programflödet. Jag
+lägger även datan för campingsplatsen och el:en i separata klass
+för att abstrahera metoden vilken vi tilldelar dessa. Jag antar att
+de kommer bli något smartare än slumpmässigt i senare versioner av
+programmet. Jag flyttar inläsningsmetoderna till en separat 'Input'
+klass, de är tillräckligt generella för att kunna återanvändas i
+diverse projekt. Jag försöker även rubyfiera de inmatningsmetoderna
+jag har skrivit.
+
+Menyn får en egen klass som är helt okopplad till applikationen och
+kan återanvändas för andra projekt.
+
+Jag försöker mig på att göra något som liknar anonyma klasser i
+Java. Men jag kom fram till att man borde använda block istället.
+Läser lite i "programming ruby the pragmatic programmer's guide".
+
+Jag har bestämt mig för att flytta inläsningslogiken från Guest:s
+konstruktor.
+
+2010-05-30:
+Byter ut parsen mot den inbyggda i Date. Måste läsa på
+lite om undantag i Ruby för att få detta att fungera. Okej, jag tror
+jag fått till tillräckligt med validering av indatan nu. Jag är lite
+osäker på hur mycket "dokumentation" som krävs och exakt vad man ska
+skriva i readme-filen, men jag skickar in nu så får vi se.
+
+2010-05-29:
+Verkar ganska enkelt, men jag är lite oskäker på om man ska
+använda en klass för gästerna (eller snare gästen). Blir nog enklare
+om man gör så. Jag har lite problem med parsningen av datum. Jag borde
+kanske kolla upp om det finns inbyggt men jag känner att det ligger
+lite utanför labben. Om man skicka datan till en databas sen kommer ju
+checken att göras av databasen. Jag googlade runt lite för att ta reda
+på hur man använder iteratorer, det liknar uppbyggnaden av anonyma
+funktioner i funktionella språk. Verkar vara betydligt krångligare
+än lambda-uttryck i scheme dock. Har bara lite testning och kontroll
+av feltillstånd kvar. Kanske behöver lägga till någon mer kommentar
+i koden också.

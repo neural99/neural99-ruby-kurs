@@ -1,0 +1,17 @@
+2010-04-30:
+Byter ut parsen mot den inbyggda i Date. Måste läsa på lite om undantag i
+Ruby för att få detta att fungera. Okej, jag tror jag fått till
+tillräckligt med validering av indatan nu. Jag är lite osäker på 
+hur mycket "dokumentation" som krävs och exakt vad man ska skriva i
+readme-filen, men jag skickar in nu så får vi se.
+
+2010-04-29:
+Verkar ganska enkelt, men jag är lite oskäker på om man ska använda en klass 
+för gästerna (eller snare gästen). Blir nog enklare om man gör så. Jag har
+lite problem med parsningen av datum. Jag borde kanske kolla upp om det finns
+inbyggt men jag känner att det ligger lite utanför labben. Om man skicka datan
+till en databas sen kommer ju checken att göras av databasen. Jag googlade runt
+lite för att ta reda på hur man använder iteratorer, det liknar uppbyggnaden
+av anonyma funktioner i funktionella språk. Verkar vara betydligt krångligare
+än lambda-uttryck i scheme dock. Har bara lite testning och kontroll av 
+feltillstånd kvar. Kanske behöver lägga till någon mer kommentar i koden också.

@@ -1,0 +1,182 @@
+2010-07-21:
+Jag hade lite problem med att representera gäster i och med att 
+man kan tänka sig att gästerna bor över flera gånger. Ska man 
+återanvända raden i tabellen eller skapa en ny rad. Min lösning
+var att skapa två tabeller: en som har hand om gästen och datan
+som är relaterat till kunden, och en annan tabell som har hand om
+datan relaterat till sjävla vistelsen. Problemet är att jag 
+fortfarande bara har en klass Guest får båda dessa tabeller.
+Resultatet är att inkapsligen inte är så bra som den skulle kunna
+vara.
+
+Stay-tabellen får sina ifylld data i från subklasserna PlotGuest
+och CabinGuest.
+
+Det är inte heller så snyggt med SQL inbakat djupt i koden men jag
+har inte listat ut något bra sätt att fixa det. 
+
+En risk med att ha så många tabeller är att de blir ur synk. En 
+risk som är ännu större eftersom jag inte har använt några foreign
+keys. Egentligen borde man kanske se till att placera operationerna 
+i transaktioner så att man ser till att inte datan blir korrupt i 
+databasen. Men jag känner att jag inte har tid att lägga till det. 
+Databas-schemat är så pass enkelt så det ska inte vara några 
+svårigheter att reparera skadan manuellt.
+
+2010-07-18:
+Jag behåller den interna strukturen och samlingarna så mycket som
+möjligt och ser till att de synkroniseras mot databasen. Alternativt
+skulle man kunna försöka läsa in allt från databasen direkt men jag tror
+det blir enklare om jag kan behålla mycket av den strukturella koden
+som finns. 
+
+Det finns vissa uppenbara problem med detta tillvägagångsätt,
+t.e.x om man skulle vilja använda ett separat program för att 
+uppdatera databasen. Då blir det problem om man bara laddar in
+databasen när programmet startar.
+
+Jag har ingen lust att sätta mig in i MySQL:s datatyper och 
+JOINs och likande så jag använder VARCHAR(255) för det
+mesta inklusive datum. Eftersom jag redan har parsat datumen med 
+Ruby's date-klass så antar jag att det är säkert att göra så.
+
+Jag har lyckats bryta inkapslingen i EconomyPost. Jag kommer att 
+göra en likanande lösning för Guest-klassen. Det är olycksamt att 
+man ska behöva offra objektorienteringen för att klämma in datan
+i databasen.
+
+2010-07-08:
+Börjar med att skriva fildumpningen. Jag väljer enklast möjliga
+filformat eftersom det bara ska läsas av människor.
+
+Duck-typing är lite kneppigt att utnyttja. Jag känner att jag gärna
+vill luta sig på en explicit klasshieraki istället. Kanske är man 
+lite Java-skadad helt enkelt. Men det ser inte ut som jag behöver
+ändra mycket för labb4. Jag tänke jag skulle försöka mig på en 
+mixin.
+
+2010-06-24:
+Jag testade programmet i Ruby 1.8.6 och den crashar med felet att
+Array#choice inte finns. Array#choice är en funktion som är ny i 
+Ruby 1.8.7. Det kan ha varit detta problem som gjorde att programmet
+oväntad inte fungerade. 
+
+2010-06-16:
+Nu har jag meny-logiken (t.e.x redigera prislista menyn)
+liggandes i meny-klassen. Jag funderade lite på om jag skulle lägga
+koden i PriceList-klassen. (PriceList redigerar sig själv).  Men jag
+bestämde mig för att inte göra det, eftersom att redigera en prislista
+inte har med informationen sparad i instansen, utan är snarare en fråga
+om gränsnittsprogrammering. Jag är dock lite missnöjd med min OOP
+design, speciellt Menu-subklasserna.
+
+Den metod jag använder för att försöka göra systemet så objekt-orienterad
+som möjligt är att jag tänker vad jag behöver ändra för att lägga till
+en ny Rentable. Desto mindre man behöver ändra desto bättre är systemet
+uppbyggt.
+
+Java har abstrakta klasser. Jag skulle formodligen vilja göra Rentable
+till en sådan eftersom du inte vill ha någon instans av Rentable. Jag 
+är lite fast i Java-tänket tror jag eftersom jag har gjort deklarationer
+av Rentable#id som bara skickar en tom sträng men egentligen behövs ju 
+inte den.
+
+2010-06-15:
+Flyttar runt logiken lite för att få det att vara mer OOP.
+Det är lite oklart om man ska göra så att man kan ändra priset på
+gäster som nu bor på Ruby Camping eller om man ska se till att alla
+får betala det priset de checka in med.  Jag har gjort så att jag kör
+deep copy på PriceList så varje gäst har sin egen PriceList-instans.
+
+Jag jobbar nu på funktionalitet som gör att man kan avbryta inmatningen
+av en gäst genom EOF. Kan vara bra om man skriver något fel. Men
+det blir många if-satser som kollar om det skickar tillbaka nil. Jag
+funderar lite på om man kan använda throw/catch istället. Men jag
+gillar inte undantag, de krånglar till saker tycker jag. Bättre med
+retur-värden enligt mig.
+
+2010-06-14:
+Jag har ritat upp ett UML-diagram med de viktigaste klasserna
+jag ska ha. Jag ska försöka göra ganska många små klasser och
+använda polymorfi istället för massa if-satser. Jag har hört om
+den metoden för att få bort if-satser tidigare, men det känns lite
+onartuligt att använda arv i Ruby när man har duck-typing. Jag menar
+när man inte har någon kompilator som gör strikta typchecker känns
+det inte jättemotiverat att använda arv. Jag antar att det är viktigt
+för återanvändning av kod och de-coupling.
+
+Jag är osäker på vilken seperation av användargränsnittet och
+datarepresentationen jag ska eftersträva. Eftersom det inte ser ut som
+vi ska bygga något annat UI senare i kursen, är det inte något jag
+prioriterar, men jag antar att man egentligen borde göra det. Jag tror
+jag kan få koden snyggare om jag flyttar ihop dessa. Dvs. göra så
+att PriceList har hand om redigeringen av en en prislista inklusive menyn.
+
+Jag drog ut kod från RubyCamping till ListMenu och EconomyMenu. Även om
+det inte är klasser egentligen så är det ett bra sätt att organisera
+koden.
+
+Att kapsla in funktionen i en klass är inte så lätt visar det
+sig. Abstraktionen läcker över hela mitt program.
+
+Fortfarande problem med för mycket if-satser och loopar. Svårt att
+göra inmatning med iteratorer, tycker jag.
+
+Electricity ska inte vara en Rentable vid närmare eftertanke, den kan
+endå implementera calc_price om den vill.
+
+2010-06-10:
+Jag skriver README-filen. Lägger till mer kommentarer och
+snyggar upp koden. Jag börjar förstå hur kraftfulla Rubys iteratorer
+och block är. Dock börjar jag även se fördelar med statisk typning
+versus dynamaisk typning. Jag tror också arvsmekanismen i Ruby inte är
+lika viktig som i Java, där typningen måste matcha upp i compile-time.
+
+Att fånga NoMethodError i menu.rb kanske inte var den bästa ideen,
+jag fick lite konstiga felmeddelanden som jag först inte förstod men
+kunde senare komma på vad de berode på.
+
+2010-06-09:
+Jag har börjat designa klasserna. Jag ser vissa problem med
+att göra så att Gäst-klassen läser in sig själv. Det kan uppkomma
+situationer där en instans inte har gilltig data. Men som jag designade
+version 1 får man fortsätta tills man har matat in gilltig data. Då
+borde denna situation aldrig uppstå. Det kanske inte heller är så
+snyggt att lämna gäst-instansen i kontroll av programflödet. Jag
+lägger även datan för campingsplatsen och el:en i separata klass
+för att abstrahera metoden vilken vi tilldelar dessa. Jag antar att
+de kommer bli något smartare än slumpmässigt i senare versioner av
+programmet. Jag flyttar inläsningsmetoderna till en separat 'Input'
+klass, de är tillräckligt generella för att kunna återanvändas i
+diverse projekt. Jag försöker även rubyfiera de inmatningsmetoderna
+jag har skrivit.
+
+Menyn får en egen klass som är helt okopplad till applikationen och
+kan återanvändas för andra projekt.
+
+Jag försöker mig på att göra något som liknar anonyma klasser i
+Java. Men jag kom fram till att man borde använda block istället.
+Läser lite i "programming ruby the pragmatic programmer's guide".
+
+Jag har bestämt mig för att flytta inläsningslogiken från Guest:s
+konstruktor.
+
+2010-05-30:
+Byter ut parsen mot den inbyggda i Date. Måste läsa på
+lite om undantag i Ruby för att få detta att fungera. Okej, jag tror
+jag fått till tillräckligt med validering av indatan nu. Jag är lite
+osäker på hur mycket "dokumentation" som krävs och exakt vad man ska
+skriva i readme-filen, men jag skickar in nu så får vi se.
+
+2010-05-29:
+Verkar ganska enkelt, men jag är lite oskäker på om man ska
+använda en klass för gästerna (eller snare gästen). Blir nog enklare
+om man gör så. Jag har lite problem med parsningen av datum. Jag borde
+kanske kolla upp om det finns inbyggt men jag känner att det ligger
+lite utanför labben. Om man skicka datan till en databas sen kommer ju
+checken att göras av databasen. Jag googlade runt lite för att ta reda
+på hur man använder iteratorer, det liknar uppbyggnaden av anonyma
+funktioner i funktionella språk. Verkar vara betydligt krångligare
+än lambda-uttryck i scheme dock. Har bara lite testning och kontroll
+av feltillstånd kvar. Kanske behöver lägga till någon mer kommentar
+i koden också.
